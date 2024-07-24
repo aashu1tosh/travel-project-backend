@@ -1,16 +1,13 @@
 import jwt from 'jsonwebtoken';
 import { DotenvConfig } from '../config/env.config';
-import { ROLE } from '../constant/enum';
-import {
-    type IJwtOptions,
-    type IJwtPayload,
-} from '../interface/jwt.interfaces';
+import { type IJwtOptions } from '../interface/jwt.interfaces';
+import { ROLE } from './../constant/enum';
 
-class WebTokenService {
-    sign(user: IJwtPayload, options: IJwtOptions, role: ROLE): string {
+export class WebTokenService {
+    sign(id: string, options: IJwtOptions, role: ROLE): string {
         return jwt.sign(
             {
-                id: user.id,
+                id: id,
                 role,
             },
             options.secret,
@@ -24,9 +21,9 @@ class WebTokenService {
         return jwt.verify(token, secret);
     }
 
-    generateAccessToken(user: IJwtPayload, role: ROLE): string {
+    generateAccessToken(id: string, role: ROLE): string {
         return this.sign(
-            user,
+            id,
             {
                 expiresIn: DotenvConfig.ACCESS_TOKEN_EXPIRES_IN,
                 secret: DotenvConfig.ACCESS_TOKEN_SECRET,
@@ -36,11 +33,11 @@ class WebTokenService {
     }
 
     generateTokens(
-        user: IJwtPayload,
+        id: string,
         role: ROLE
     ): { accessToken: string; refreshToken: string } {
         const accessToken = this.sign(
-            user,
+            id,
             {
                 expiresIn: DotenvConfig.ACCESS_TOKEN_EXPIRES_IN,
                 secret: DotenvConfig.ACCESS_TOKEN_SECRET,
@@ -49,7 +46,7 @@ class WebTokenService {
         );
 
         const refreshToken = this.sign(
-            user,
+            id,
             {
                 expiresIn: DotenvConfig.REFRESH_TOKEN_EXPIRES_IN,
                 secret: DotenvConfig.REFRESH_TOKEN_SECRET,
@@ -58,13 +55,4 @@ class WebTokenService {
         );
         return { accessToken, refreshToken };
     }
-
-    // generateTokensForSubscription(id: string, expiresDate: string): string {
-    //     const expiresIn = daysSince(expiresDate)
-    //     return jwt.sign({ id }, DotenvConfig.ACCESS_TOKEN_SECRET, {
-    //         expiresIn,
-    //     })
-    // }
 }
-
-export default new WebTokenService();
