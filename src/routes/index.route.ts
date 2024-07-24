@@ -17,14 +17,6 @@ const routes: Route[] = [
         route: ping,
     },
     {
-        path: '/customer',
-        route: ping,
-    },
-    {
-        path: '/vendor',
-        route: ping,
-    },
-    {
         path: '/admin',
         route: ping,
     },
