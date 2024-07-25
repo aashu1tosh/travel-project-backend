@@ -1,7 +1,7 @@
 import { type Request, type Response } from 'express';
 import { StatusCodes } from '../constant/statusCodes';
 import { default as authServices } from '../services/auth.service';
-import { Message } from './../constant/messages';
+import { Message, UpdatedMessage } from './../constant/messages';
 
 class AuthController {
     async createUser(req: Request, res: Response) {
@@ -36,6 +36,16 @@ class AuthController {
             success: true,
             message: Message.loginSuccessfully,
             data: response,
+        });
+    }
+
+    async updatePassword(req: Request, res: Response) {
+        const id = req.user?.id as string;
+        console.log('🚀 ~ AuthController ~ updatePassword ~ id:', id);
+        await authServices.updatePassword(req.body, id);
+        res.status(StatusCodes.ACCEPTED).json({
+            success: true,
+            message: UpdatedMessage('Password'),
         });
     }
 }
