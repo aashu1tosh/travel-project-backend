@@ -1,11 +1,12 @@
 import { type NextFunction, type Request, type Response } from 'express';
 import { DotenvConfig } from '../config/env.config';
 import { Message } from '../constant/messages';
-import tokenService from '../services/webToken.service';
+import { WebTokenService } from '../services/webToken.service';
 import HttpException from '../utils/HttpException.utils';
 
 export const authentication = () => {
     return (req: Request, _: Response, next: NextFunction) => {
+        const tokenService = new WebTokenService();
         const tokens = req.headers.authorization?.split(' ');
 
         try {
