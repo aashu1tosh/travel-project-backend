@@ -4,14 +4,13 @@ import userService from './../services/user.service';
 
 class UserController {
     async newsLetter(req: Request, res: Response) {
-        const email = req?.body?.email
-        await userService.newsLetter(email)
+        const email = req?.body?.email;
+        await userService.newsLetter(email);
         res.status(StatusCodes.ACCEPTED).json({
             success: true,
-            message: "You have successfully subscribed to news letter"
+            message: 'You have successfully subscribed to news letter',
         });
     }
-
 }
 
 export default UserController;

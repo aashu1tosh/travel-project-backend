@@ -15,6 +15,4 @@ router.post(
     catchAsync(userController.newsLetter)
 );
 
-
-
 export default router;
