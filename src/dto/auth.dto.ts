@@ -56,7 +56,7 @@ export class CreateUserDTO {
     role: string;
 }
 
-export class RequestEmailVerification {
+export class RequestEmailVerificationDTO {
     @IsNotEmpty()
     @IsEmail()
     email: string;
