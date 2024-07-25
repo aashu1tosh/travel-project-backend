@@ -11,3 +11,11 @@ export interface IUser {
         phoneNumber: string;
     };
 }
+
+export interface IContactForm {
+    fullName: string;
+    email: string;
+    phoneNumber: string;
+    subject: string;
+    message: string;
+}
