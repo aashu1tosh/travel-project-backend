@@ -1,11 +1,17 @@
 import { AppDataSource } from './../config/database.config';
+import { Message } from './../constant/messages';
+import { ContactForm } from './../entities/contactForm.entity';
 import { NewsLetter } from './../entities/newLetter.entity';
+import { IContactForm } from './../interface/user.interface';
 import HttpException from './../utils/HttpException.utils';
 
 export class UserService {
     constructor(
         private readonly newsLetterRepo = AppDataSource.getRepository(
             NewsLetter
+        ),
+        private readonly contactFormRepo = AppDataSource.getRepository(
+            ContactForm
         )
     ) {}
 
@@ -28,7 +34,14 @@ export class UserService {
         }
     }
 
-    async messageForm() {}
+    async contactForm(data: IContactForm) {
+        try {
+            let form = this.contactFormRepo.create(data);
+            await this.contactFormRepo.save(form);
+        } catch (error) {
+            throw HttpException.badRequest(Message.unsuccessfull);
+        }
+    }
 }
 
 export default new UserService();
