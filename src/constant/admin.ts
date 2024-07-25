@@ -2,8 +2,6 @@ import { DotenvConfig } from './../config/env.config';
 import { IUser } from './../interface/user.interface';
 import { ROLE } from './enum';
 
-
-
 export const admins: IUser[] = [
     {
         email: 'admin@infocare.com',
@@ -13,7 +11,7 @@ export const admins: IUser[] = [
             firstName: 'Information',
             middleName: 'Care',
             lastName: 'Pvt. Ltd.',
-            phoneNumber: '9843818516'
-        }
+            phoneNumber: '9843818516',
+        },
     },
-]
+];
