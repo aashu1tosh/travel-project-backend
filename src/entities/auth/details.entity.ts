@@ -13,7 +13,7 @@ export class AuthDetails extends Base {
     @Column({ name: 'last_name' })
     lastName: string;
 
-    @Column({ name: 'phone_number', nullable: true })
+    @Column({ name: 'phone_number', nullable: true, unique: true })
     phoneNumber: string;
 
     @OneToOne(() => Auth, (auth) => auth.details, {
