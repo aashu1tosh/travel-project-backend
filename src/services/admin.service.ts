@@ -1,4 +1,5 @@
 import { AppDataSource } from './../config/database.config';
+import { ROLE } from './../constant/enum';
 import { Message } from './../constant/messages';
 import { Auth } from './../entities/auth/auth.entity';
 import { AuthDetails } from './../entities/auth/details.entity';
@@ -12,16 +13,33 @@ class AdminService {
         )
     ) {}
 
-    async getById(id: string, details: boolean = true): Promise<Auth> {
-        const query = this.authRepo
-            .createQueryBuilder('admin')
-            .where('admin.id = :id', { id });
-        if (details) query.leftJoinAndSelect('admin.details', 'details');
+    async getAllUser() {
+        const query = await this.authRepo.createQueryBuilder('admin').getMany();
 
-        const user = await query.getOne();
-        if (!user) throw HttpException.notFound(Message.notFound);
+        return query;
+    }
+    async getUserById(id: string, details: boolean = true): Promise<Auth> {
+        const query = await this.authRepo
+            .createQueryBuilder('auth')
+            .leftJoinAndSelect('auth.details', 'details')
+            .where('auth.id = :id', { id: id })
+            .getOne();
 
-        return user;
+        if (!query) throw HttpException.notFound(Message.notFound);
+
+        return query;
+    }
+
+    async deleteUser(id: string) {
+        const user = await this.getUserById(id);
+        if (user?.role === ROLE.ADMIN)
+            throw HttpException.forbidden('Admin cannot be deleted.');
+        await this.authRepo
+            .createQueryBuilder()
+            .delete()
+            .from(Auth)
+            .where('id = :id', { id: id })
+            .execute();
     }
 }
 
