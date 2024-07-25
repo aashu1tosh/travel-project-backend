@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 import { DotenvConfig } from '../config/env.config';
-import { type IJwtOptions } from '../interface/jwt.interfaces';
+import { type IJwtOptions } from '../interface/jwt.interface';
 import { ROLE } from './../constant/enum';
 
 export class WebTokenService {
@@ -13,6 +13,18 @@ export class WebTokenService {
             options.secret,
             {
                 expiresIn: options.expiresIn,
+            }
+        );
+    }
+
+    emailVerifyToken(id: string): string {
+        return jwt.sign(
+            {
+                id: id,
+            },
+            DotenvConfig.VERIFY_EMAIL_TOKEN_SECRET,
+            {
+                expiresIn: DotenvConfig.VERIFY_EMAIL_TOKEN_EXPIRES_IN,
             }
         );
     }
