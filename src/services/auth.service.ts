@@ -6,7 +6,7 @@ import { DotenvConfig } from './../config/env.config';
 import { CreatedMessage, Message } from './../constant/messages';
 import { AuthDetails } from './../entities/auth/details.entity';
 import { IUpdatePassword } from './../interface/auth.interface';
-import { AdminService } from './admin.service';
+import adminService from './admin.service';
 import { BcryptService } from './bcrypt.service';
 import { EmailService, IMailOptions } from './utils/email.service';
 import { WebTokenService } from './webToken.service';
@@ -17,7 +17,6 @@ class AuthService {
         private readonly authDetailsRepo = AppDataSource.getRepository(
             AuthDetails
         ),
-        private readonly adminService = new AdminService(),
         private readonly bcryptService = new BcryptService(),
         private readonly webTokenGenerate = new WebTokenService(),
         private readonly emailService = new EmailService()
@@ -125,7 +124,7 @@ class AuthService {
         if (!isPasswordMatched)
             throw HttpException.notFound(Message.invalidCredentials);
 
-        user = await this.adminService.getById(user?.id as string);
+        user = await adminService.getById(user?.id as string);
         const tokens = this.webTokenGenerate.generateTokens(
             user?.id as string,
             user.role
