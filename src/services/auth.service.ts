@@ -2,10 +2,12 @@ import { AppDataSource } from '../config/database.config';
 import { ROLE } from '../constant/enum';
 import { Auth } from '../entities/auth/auth.entity';
 import HttpException from '../utils/HttpException.utils';
+import { DotenvConfig } from './../config/env.config';
 import { CreatedMessage, Message } from './../constant/messages';
 import { AuthDetails } from './../entities/auth/details.entity';
 import { AdminService } from './admin.service';
 import { BcryptService } from './bcrypt.service';
+import { EmailService, IMailOptions } from './utils/email.service';
 import { WebTokenService } from './webToken.service';
 
 class AuthService {
@@ -16,8 +18,9 @@ class AuthService {
         ),
         private readonly adminService = new AdminService(),
         private readonly bcryptService = new BcryptService(),
-        private readonly webTokenGenerate = new WebTokenService()
-    ) {}
+        private readonly webTokenGenerate = new WebTokenService(),
+        private readonly emailService = new EmailService()
+    ) { }
 
     async createUser(data: Auth) {
         try {
@@ -58,12 +61,59 @@ class AuthService {
         }
     }
 
+    async requestVerification(email: string) {
+        try {
+            const emailExist = await this.authRepo.findOne({
+                where: { email: email },
+            });
+            if (!emailExist)
+                throw HttpException.badRequest('Given Email does not exist');
+
+            const token = this.webTokenGenerate.emailVerifyToken(
+                emailExist.id as string
+            );
+
+            const verificationLink = `${DotenvConfig.BACKEND_URL}api/v1/auth/verify/${token}`;
+
+            const mailOptions: IMailOptions = {
+                to: emailExist?.email,
+                subject: 'Regarding Email Verification',
+                text:
+                    'Verification works withing 5 minutes with following link \n' +
+                    verificationLink,
+            };
+            this.emailService.sendMail(mailOptions);
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async verifyEmail(token: string) {
+        try {
+            const verified = await this.webTokenGenerate.verify(
+                token,
+                DotenvConfig.VERIFY_EMAIL_TOKEN_SECRET
+            );
+            if (!verified) throw HttpException.conflict(Message.invalidOTP);
+
+            const user = await this.authRepo.findOneBy({ id: verified.id });
+            if (user) user.otpVerified = true;
+            user?.save();
+
+            return 'Email Verification Successful';
+        } catch (error) { }
+    }
+
     async login(data: Auth) {
         let user = await this.authRepo.findOne({
             where: [{ email: data.email }],
-            select: ['id', 'email', 'password'],
+            select: ['id', 'email', 'password', 'otpVerified'],
         });
         if (!user) throw HttpException.notFound(Message.invalidCredentials);
+        if (!user?.otpVerified)
+            throw HttpException.forbidden(
+                'Please verify Email before signing in.'
+            );
         const isPasswordMatched = await this.bcryptService.compare(
             data.password,
             user.password
