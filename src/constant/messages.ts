@@ -25,6 +25,7 @@ export const Message = {
     otpExpired: 'OTP time out',
     invalidOTP: 'Invalid OTP',
     validOTP: 'Valid OTP',
+    unsuccessfull: "Task failed"
 };
 export const getNotFoundMessage = (title: string) => {
     return `${title} not found`;
