@@ -5,6 +5,7 @@ import HttpException from '../utils/HttpException.utils';
 import { DotenvConfig } from './../config/env.config';
 import { CreatedMessage, Message } from './../constant/messages';
 import { AuthDetails } from './../entities/auth/details.entity';
+import { IUpdatePassword } from './../interface/auth.interface';
 import { AdminService } from './admin.service';
 import { BcryptService } from './bcrypt.service';
 import { EmailService, IMailOptions } from './utils/email.service';
@@ -130,6 +131,40 @@ class AuthService {
             user.role
         );
         return { user, tokens };
+    }
+
+    async updatePassword(data: IUpdatePassword, id: string) {
+        try {
+            if (data.oldPassword === data.newPassword)
+                throw HttpException.conflict(
+                    'New password should differ from old password.'
+                );
+
+            let user = await this.authRepo.findOne({
+                where: { id: id },
+            });
+            if (!user?.otpVerified)
+                throw HttpException.badRequest('Please verify email first.');
+            if (user) {
+                if (
+                    await this.bcryptService.compare(
+                        data.oldPassword,
+                        user.password
+                    )
+                ) {
+                    try {
+                        const password = await this.bcryptService.hash(
+                            data.newPassword
+                        );
+                        user.password = password;
+                        user.save();
+                    } catch (error: any) {
+                        throw HttpException.conflict(error?.message);
+                    }
+                } else throw HttpException.badRequest('Invalid Credential');
+                return null;
+            }
+        } catch (error) {}
     }
 }
 
