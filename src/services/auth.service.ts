@@ -90,10 +90,12 @@ class AuthService {
 
     async verifyEmail(token: string) {
         try {
+            console.log(token)
             const verified = await this.webTokenGenerate.verify(
                 token,
                 DotenvConfig.VERIFY_EMAIL_TOKEN_SECRET
             );
+            console.log(verified)
             if (!verified) throw HttpException.conflict(Message.invalidOTP);
 
             const user = await this.authRepo.findOneBy({ id: verified.id });
@@ -101,7 +103,9 @@ class AuthService {
             user?.save();
 
             return 'Email Verification Successful';
-        } catch (error) { }
+        } catch (error) {
+            throw error
+        }
     }
 
     async login(data: Auth) {
