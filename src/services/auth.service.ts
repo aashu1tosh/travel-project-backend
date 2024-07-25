@@ -124,7 +124,7 @@ class AuthService {
         if (!isPasswordMatched)
             throw HttpException.notFound(Message.invalidCredentials);
 
-        user = await adminService.getById(user?.id as string);
+        user = await adminService.getUserById(user?.id as string);
         const tokens = this.webTokenGenerate.generateTokens(
             user?.id as string,
             user.role
