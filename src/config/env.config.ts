@@ -19,6 +19,9 @@ export class DotenvConfig {
     static ACCESS_TOKEN_EXPIRES_IN = process.env.ACCESS_TOKEN_EXPIRES_IN!;
     static REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET!;
     static REFRESH_TOKEN_EXPIRES_IN = process.env.REFRESH_TOKEN_EXPIRES_IN!;
+    static VERIFY_EMAIL_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET!;
+    static VERIFY_EMAIL_TOKEN_EXPIRES_IN =
+        process.env.REFRESH_TOKEN_EXPIRES_IN!;
 
     // SEED ADMIN PASSWORD
     static ADMIN_PASSWORD = process.env.ADMIN_PASSWORD!;
@@ -28,6 +31,8 @@ export class DotenvConfig {
     static MAIL_PORT = +process.env.MAIL_PORT!;
     static EMAIL_USER = process.env.EMAIL_USER!;
     static EMAIL_PASSWORD = process.env.EMAIL_PASSWORD!;
+
+    static OTP_SECRET = process.env.OTP_SECRET!;
 
     // BACKEND URL
     static BACKEND_URL = process.env
