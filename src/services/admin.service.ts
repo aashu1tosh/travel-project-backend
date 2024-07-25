@@ -4,7 +4,7 @@ import { Auth } from './../entities/auth/auth.entity';
 import { AuthDetails } from './../entities/auth/details.entity';
 import HttpException from './../utils/HttpException.utils';
 
-export class AdminService {
+class AdminService {
     constructor(
         private readonly authRepo = AppDataSource.getRepository(Auth),
         private readonly authDetailsRepo = AppDataSource.getRepository(
@@ -24,3 +24,5 @@ export class AdminService {
         return user;
     }
 }
+
+export default new AdminService();
