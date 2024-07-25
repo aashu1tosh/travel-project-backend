@@ -11,6 +11,14 @@ class UserController {
             message: 'You have successfully subscribed to news letter',
         });
     }
+
+    async contactForm(req: Request, res: Response) {
+        await userService.contactForm(req.body);
+        res.status(StatusCodes.ACCEPTED).json({
+            success: true,
+            message: 'Form submitted successfully',
+        });
+    }
 }
 
 export default UserController;
