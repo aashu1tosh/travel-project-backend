@@ -1,6 +1,7 @@
 import { Request, Response, Router } from 'express';
-import ping from './ping.route';
 import auth from './auth.route';
+import ping from './ping.route';
+import user from './user.route';
 
 interface Route {
     path: string;
@@ -16,6 +17,10 @@ const routes: Route[] = [
     {
         path: '/auth',
         route: auth,
+    },
+    {
+        path: '/user',
+        route: user,
     },
     {
         path: '/admin',
