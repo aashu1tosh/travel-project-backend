@@ -1,8 +1,9 @@
 import { Request, Response, Router } from 'express';
+import admin from './admin.route';
 import auth from './auth.route';
+import media from './media.route';
 import ping from './ping.route';
 import user from './user.route';
-
 interface Route {
     path: string;
     route: Router;
@@ -24,7 +25,11 @@ const routes: Route[] = [
     },
     {
         path: '/admin',
-        route: ping,
+        route: admin,
+    },
+    {
+        path: '/media',
+        route: media,
     },
 ];
 
