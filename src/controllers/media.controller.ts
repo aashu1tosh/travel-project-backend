@@ -11,6 +11,7 @@ class MediaController {
             throw HttpException.badRequest('Sorry file could not be uploaded.');
 
         const files = req?.files;
+        const authId = req?.user?.id as string;
         const idList = Array.isArray(files)
             ? await Promise.all(
                   files?.map(async (file: any) => {
@@ -20,7 +21,8 @@ class MediaController {
                       const response = await mediaService.create(
                           name,
                           mimeType,
-                          type
+                          type,
+                          authId
                       );
                       return response.id;
                   })
@@ -45,14 +47,15 @@ class MediaController {
             throw HttpException.badRequest('Sorry file could not be uploaded.');
 
         const file = req?.file;
-
+        const authId = req?.user?.id as string;
         const name = file?.filename;
         const mimeType = file?.mimetype;
         const type = req.body?.type as MediaType;
         const response = await mediaService.create(
             name as string,
             mimeType as string,
-            type
+            type,
+            authId
         );
 
         const data = { mediaId: response.id };
