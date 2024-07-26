@@ -3,7 +3,6 @@ import { Auth } from '../entities/auth/auth.entity';
 import { AuthDetails } from './../entities/auth/details.entity';
 import { IUser } from './../interface/user.interface';
 import { BcryptService } from './../services/bcrypt.service';
-
 import { admins } from './../constant/admin';
 import Print from './../utils/print';
 const authRepo = AppDataSource.getRepository(Auth);
