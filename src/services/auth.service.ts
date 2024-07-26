@@ -90,7 +90,6 @@ class AuthService {
 
     async verifyEmail(token: string) {
         try {
-            console.log(token);
             const verified = await this.webTokenGenerate.verify(
                 token,
                 DotenvConfig.VERIFY_EMAIL_TOKEN_SECRET
