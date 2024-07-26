@@ -1,5 +1,6 @@
 import { type Request, type Response } from 'express';
 import {
+    CreatedMessage,
     Message,
     UpdatedMessage,
     deletedMessage,
@@ -7,6 +8,7 @@ import {
 import { StatusCodes } from './../constant/statusCodes';
 import adminService from './../services/admin.service';
 import contactInformationService from './../services/contactInformation.service';
+import testimonialService from './../services/testimonial.service';
 import { getPaginationData, paginationValidator } from './../utils/pagination';
 
 class AdminController {
@@ -51,6 +53,14 @@ class AdminController {
         res.status(StatusCodes.ACCEPTED).json({
             success: true,
             message: UpdatedMessage('Contact Information'),
+        });
+    }
+
+    async addTestimonials(req: Request, res: Response) {
+        await testimonialService.addTestimonials(req.body);
+        res.status(StatusCodes.CREATED).json({
+            success: true,
+            message: CreatedMessage('New testimonials'),
         });
     }
 }
