@@ -12,5 +12,5 @@ export enum MediaType {
     PROFILE = 'PROFILE',
     BACKGROUND = 'BACKGROUND',
     THUMBNAIL = 'THUMBNAIL',
-    DETAIL = 'DETAIL'
+    DETAIL = 'DETAIL',
 }
