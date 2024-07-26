@@ -162,7 +162,9 @@ class AuthService {
                 } else throw HttpException.badRequest('Invalid Credential');
                 return null;
             }
-        } catch (error) {}
+        } catch (error) {
+            throw error;
+        }
     }
 }
 
