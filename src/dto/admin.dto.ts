@@ -4,14 +4,17 @@ import {
     IsNumber,
     IsOptional,
     IsString,
+    IsUUID,
     Matches,
+    Max,
+    Min,
 } from 'class-validator';
 import { Message } from './../constant/messages';
 import { phoneNumberRegex } from './../constant/regex';
 
 export class ContactInformationDTO {
     @IsNotEmpty()
-    @IsString()
+    @IsUUID()
     id: string;
 
     @IsOptional()
@@ -59,4 +62,28 @@ export class ContactInformationDTO {
     @IsOptional()
     @IsString()
     twitterLink: string;
+}
+
+export class TestimonialDTO {
+    @IsNotEmpty()
+    @IsString()
+    fullName: string;
+
+    @IsNotEmpty()
+    @IsString()
+    testimonial: string;
+
+    @IsNotEmpty()
+    @IsString()
+    reviewerLocation: string;
+
+    @IsNotEmpty()
+    @IsNumber()
+    @Min(1)
+    @Max(5)
+    rating: string;
+
+    @IsOptional()
+    @IsUUID()
+    media: string;
 }
