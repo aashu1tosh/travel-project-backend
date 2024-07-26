@@ -16,9 +16,8 @@ class AdminController {
             message: Message.fetched,
             data: {
                 data: response.data,
-                pagination: getPaginationData(response.total, page, perpage)
-            }
-
+                pagination: getPaginationData(response.total, page, perpage),
+            },
         });
     }
 
