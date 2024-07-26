@@ -31,7 +31,7 @@ class AdminService {
         const [data, total] = await query.getManyAndCount();
         return { data, total };
     }
-    
+
     async getUserById(id: string, details: boolean = true): Promise<Auth> {
         const query = await this.authRepo
             .createQueryBuilder('auth')
