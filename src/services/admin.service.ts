@@ -13,11 +13,25 @@ class AdminService {
         )
     ) {}
 
-    async getAllUser() {
-        const query = await this.authRepo.createQueryBuilder('admin').getMany();
+    async getAllUser(page: number, perpage: number) {
+        const query = this.authRepo
+            .createQueryBuilder('auth')
+            .select([
+                'auth.id',
+                'auth.createdAt',
+                'auth.email',
+                'auth.role',
+                'auth.otpVerified',
+            ]);
+        query
+            .orderBy('auth.createdAt')
+            .limit(perpage)
+            .offset((page - 1) * perpage);
 
-        return query;
+        const [data, total] = await query.getManyAndCount();
+        return { data, total };
     }
+    
     async getUserById(id: string, details: boolean = true): Promise<Auth> {
         const query = await this.authRepo
             .createQueryBuilder('auth')
