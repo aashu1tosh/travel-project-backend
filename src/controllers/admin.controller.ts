@@ -1,7 +1,12 @@
 import { type Request, type Response } from 'express';
-import { Message, deletedMessage } from './../constant/messages';
+import {
+    Message,
+    UpdatedMessage,
+    deletedMessage,
+} from './../constant/messages';
 import { StatusCodes } from './../constant/statusCodes';
 import adminService from './../services/admin.service';
+import contactInformationService from './../services/contactInformation.service';
 import { getPaginationData, paginationValidator } from './../utils/pagination';
 
 class AdminController {
@@ -37,6 +42,15 @@ class AdminController {
         res.status(StatusCodes.SUCCESS).json({
             success: true,
             message: deletedMessage('User'),
+        });
+    }
+
+    async updateContactInformation(req: Request, res: Response) {
+        const { id, ...body } = req.body;
+        await contactInformationService.updateContactInformation(id, body);
+        res.status(StatusCodes.ACCEPTED).json({
+            success: true,
+            message: UpdatedMessage('Contact Information'),
         });
     }
 }
