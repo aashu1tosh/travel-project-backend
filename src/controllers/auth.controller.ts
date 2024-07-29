@@ -1,7 +1,7 @@
 import { type Request, type Response } from 'express';
 import { StatusCodes } from '../constant/statusCodes';
 import { default as authServices } from '../services/auth.service';
-import { Message, UpdatedMessage } from './../constant/messages';
+import { Message, updatedMessage } from './../constant/messages';
 
 class AuthController {
     async createUser(req: Request, res: Response) {
@@ -44,7 +44,7 @@ class AuthController {
         await authServices.updatePassword(req.body, id);
         res.status(StatusCodes.ACCEPTED).json({
             success: true,
-            message: UpdatedMessage('Password'),
+            message: updatedMessage('Password'),
         });
     }
 }
