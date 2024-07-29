@@ -1,9 +1,9 @@
 import { type Request, type Response } from 'express';
 import {
-    CreatedMessage,
     Message,
-    UpdatedMessage,
+    createdMessage,
     deletedMessage,
+    updatedMessage,
 } from './../constant/messages';
 import { StatusCodes } from './../constant/statusCodes';
 import adminService from './../services/admin.service';
@@ -52,7 +52,7 @@ class AdminController {
         await contactInformationService.updateContactInformation(id, body);
         res.status(StatusCodes.ACCEPTED).json({
             success: true,
-            message: UpdatedMessage('Contact Information'),
+            message: updatedMessage('Contact Information'),
         });
     }
 
@@ -60,7 +60,16 @@ class AdminController {
         await testimonialService.addTestimonials(req.body);
         res.status(StatusCodes.CREATED).json({
             success: true,
-            message: CreatedMessage('New testimonials'),
+            message: createdMessage('New testimonials'),
+        });
+    }
+
+    async deleteTestimonials(req: Request, res: Response) {
+        const id = req.params.id
+        await testimonialService.deleteTestimonials(id);
+        res.status(StatusCodes.SUCCESS).json({
+            success: true,
+            message: deletedMessage('Testimonial'),
         });
     }
 }
