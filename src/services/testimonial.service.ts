@@ -1,6 +1,7 @@
 import { AppDataSource } from '../config/database.config';
 import { Testimonial } from './../entities/testimonial.entity';
 import HttpException from './../utils/HttpException.utils';
+import { deleteMedia } from './../utils/mediaDelete.utils';
 
 class TestimonialService {
     constructor(
@@ -20,14 +21,12 @@ class TestimonialService {
             .leftJoinAndSelect('testimonial.media', 'media')
             .where('testimonial.id = :id', { id })
             .getOne();
-        console.log(
-            '🚀 ~ TestimonialService ~ deleteTestimonials ~ response:',
-            response
-        );
+
         if (!response)
             throw HttpException.badRequest('Invalid testimonial id.');
-        // if(response.media) await mediaService.deleteMediaService(response.media as string)
-        // await this.testimonialRepo.remove(response);
+        const path = response.media.path;
+        if (response.media.path) await deleteMedia(path as string);
+        await this.testimonialRepo.remove(response);
     }
 }
 
