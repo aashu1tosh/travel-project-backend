@@ -3,7 +3,7 @@ import { ROLE } from '../constant/enum';
 import { Auth } from '../entities/auth/auth.entity';
 import HttpException from '../utils/HttpException.utils';
 import { DotenvConfig } from './../config/env.config';
-import { CreatedMessage, Message } from './../constant/messages';
+import { createdMessage, Message } from './../constant/messages';
 import { AuthDetails } from './../entities/auth/details.entity';
 import { IUpdatePassword } from './../interface/auth.interface';
 import adminService from './admin.service';
@@ -55,7 +55,7 @@ class AuthService {
             user.details = details;
             await this.authDetailsRepo.save(details);
             await this.authRepo.save(user);
-            return CreatedMessage('User');
+            return createdMessage('User');
         } catch (error: any) {
             throw HttpException.badRequest(error?.message);
         }

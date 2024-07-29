@@ -24,6 +24,10 @@ class Media extends Base {
     @JoinColumn({ name: 'auth_id' })
     auth: Auth;
 
+    // @OneToOne(() => Testimonial, { cascade: true, onDelete: 'CASCADE' })
+    // @JoinColumn({ name: 'testimonial_id' })
+    // testimonial: Auth;
+
     /**
      * Moves an image file from the temporary folder to the upload folder.
      *
@@ -59,7 +63,7 @@ class Media extends Base {
     @AfterLoad()
     async loadImagePath(): Promise<void> {
         // Construct the image path using the BASE_URL, type, id, and name properties.
-        this.path = `${DotenvConfig.BACKEND_URL}/${this.type.toLowerCase()}/${this.id}/${this.name}`;
+        this.path = `${DotenvConfig.BACKEND_URL}${this.type.toLowerCase()}/${this.name}`;
     }
 }
 

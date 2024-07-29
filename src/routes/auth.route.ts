@@ -13,21 +13,19 @@ import { authentication } from './../middleware/authentication.middleware';
 const router = express.Router();
 
 const authController = new AuthController();
-// Endpoint for creating user
+
 router.post(
     '/register',
     RequestValidator.validate(CreateUserDTO),
     catchAsync(authController.createUser)
 );
 
-//
 router.post(
     '/request-verification',
     RequestValidator.validate(RequestEmailVerificationDTO),
     catchAsync(authController.requestVerification)
 );
 
-//Endpoint for verification email
 router.get('/verify/:token', catchAsync(authController.verifyEmail));
 
 router.post(

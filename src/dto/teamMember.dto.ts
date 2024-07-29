@@ -1,6 +1,13 @@
-import { IsEmail, IsNotEmpty, IsNumber, IsString, IsUUID, Matches } from "class-validator";
-import { Message } from "./../constant/messages";
-import { phoneNumberRegex } from "./../constant/regex";
+import {
+    IsEmail,
+    IsNotEmpty,
+    IsNumber,
+    IsString,
+    IsUUID,
+    Matches,
+} from 'class-validator';
+import { Message } from './../constant/messages';
+import { phoneNumberRegex } from './../constant/regex';
 
 export class AddTeamMemberDTO {
     @IsNotEmpty()

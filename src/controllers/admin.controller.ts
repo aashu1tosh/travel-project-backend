@@ -65,7 +65,7 @@ class AdminController {
     }
 
     async deleteTestimonials(req: Request, res: Response) {
-        const id = req.params.id
+        const id = req.params.id;
         await testimonialService.deleteTestimonials(id);
         res.status(StatusCodes.SUCCESS).json({
             success: true,

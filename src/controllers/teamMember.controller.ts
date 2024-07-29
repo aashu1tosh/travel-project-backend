@@ -8,7 +8,7 @@ class TeamMemberController {
         const response = await teamMemberService.createTeamMember(req.body);
         res.status(StatusCodes.CREATED).json({
             success: true,
-            message: createdMessage("Team Member"),
+            message: createdMessage('Team Member'),
         });
     }
 

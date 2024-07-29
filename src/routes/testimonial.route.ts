@@ -1,7 +1,7 @@
 import express from 'express';
 import { ROLE } from './../constant/enum';
-import TeamMemberController from './../controllers/teamMember.controller';
-import { AddTeamMemberDTO } from './../dto/teamMember.dto';
+import AdminController from './../controllers/admin.controller';
+import { TestimonialDTO } from './../dto/admin.dto';
 import RequestValidator from './../middleware/Request.Validator';
 import { authentication } from './../middleware/authentication.middleware';
 import { authorization } from './../middleware/authorization.middleware';
@@ -12,14 +12,14 @@ const router = express.Router();
 router.use(authentication());
 router.use(authorization([ROLE.ADMIN]));
 
-const teamMemberController = new TeamMemberController();
+const adminController = new AdminController();
 
 router.post(
     '/',
-    RequestValidator.validate(AddTeamMemberDTO),
-    catchAsync(teamMemberController.addTeamMember)
+    RequestValidator.validate(TestimonialDTO),
+    catchAsync(adminController.addTestimonials)
 );
 
-router.delete('/:id', catchAsync(teamMemberController.deleteTeamMember));
+router.delete('/:id', catchAsync(adminController.deleteTestimonials));
 
 export default router;

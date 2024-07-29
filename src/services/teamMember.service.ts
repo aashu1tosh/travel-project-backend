@@ -4,8 +4,10 @@ import { TeamMember } from './../entities/teamMember.entity';
 
 class TeamMemberService {
     constructor(
-        private readonly teamMemberRepo = AppDataSource.getRepository(TeamMember)
-    ) { }
+        private readonly teamMemberRepo = AppDataSource.getRepository(
+            TeamMember
+        )
+    ) {}
 
     async createTeamMember(data: TeamMember) {
         try {
@@ -18,8 +20,9 @@ class TeamMemberService {
 
     async deleteTeamMember(id: string) {
         try {
-            const response = await this.teamMemberRepo.findOneBy({ id })
-            if (!response) throw HttpException.badRequest("Invalid team member id.")
+            const response = await this.teamMemberRepo.findOneBy({ id });
+            if (!response)
+                throw HttpException.badRequest('Invalid team member id.');
             await this.teamMemberRepo.remove(response);
         } catch (error: any) {
             throw HttpException.badRequest(error?.message);
