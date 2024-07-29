@@ -33,9 +33,9 @@ export const getNotFoundMessage = (title: string) => {
 export const deletedMessage = (title: string) => {
     return `${title} deleted successfully`;
 };
-export const UpdatedMessage = (title: string) => {
+export const updatedMessage = (title: string) => {
     return `${title} successfully updated`;
 };
-export const CreatedMessage = (title: string) => {
+export const createdMessage = (title: string) => {
     return `${title} created successfully`;
 };
