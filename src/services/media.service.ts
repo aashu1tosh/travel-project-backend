@@ -34,7 +34,7 @@ class MediaService {
             const response = await this.mediaRepo.findOneBy({ id });
             if (!response)
                 throw HttpException.badRequest('Invalid team member id.');
-            await this.teamMemberRepo.remove(response);
+            await this.mediaRepo.remove(response);
             await deleteMedia(response?.path);
         } catch (error: any) {
             throw HttpException.badRequest(error?.message);

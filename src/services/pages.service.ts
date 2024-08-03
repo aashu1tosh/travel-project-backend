@@ -7,7 +7,7 @@ import mediaService from './media.service';
 class PagesService {
     constructor(
         private readonly pagesRepo = AppDataSource.getRepository(Pages)
-    ) { }
+    ) {}
 
     async getPageInformation(page: PAGE) {
         const response = await this.pagesRepo
@@ -35,7 +35,7 @@ class PagesService {
             if (check?.media?.id !== (data?.media as unknown as string)) {
                 Object.assign(check, data);
             } else {
-                await mediaService.deleteMedia(check?.media.id)
+                await mediaService.deleteMedia(check?.media.id);
             }
             await this.pagesRepo.save(check);
         } else {
@@ -44,7 +44,7 @@ class PagesService {
         }
     }
 
-    async updatePageInformation(data: Pages) { }
+    async updatePageInformation(data: Pages) {}
 }
 
 export default new PagesService();

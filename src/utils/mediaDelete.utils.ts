@@ -6,8 +6,9 @@ import Print from './print';
 export const deleteMedia = (filepath: string): Promise<boolean> => {
     const mediaPath = filepath.split(DotenvConfig.PORT.toString())[1];
     const imagePath = path
-        .join(__dirname, '../', '../', './public/uploads')
+        .join(__dirname, '../', '../', './public/')
         .concat(mediaPath);
+
     return new Promise((resolve, reject) => {
         fs.unlink(imagePath, (error) => {
             if (error) {

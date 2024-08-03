@@ -8,7 +8,7 @@ class TestimonialService {
         private readonly testimonialRepo = AppDataSource.getRepository(
             Testimonial
         )
-    ) { }
+    ) {}
 
     async getTestimonials(perPage: number) {
         const response = await this.testimonialRepo.find({
@@ -57,7 +57,7 @@ class TestimonialService {
             .where('testimonial.id = :id', { id })
             .execute();
 
-        await mediaService.deleteMedia(response?.media?.id as string)
+        await mediaService.deleteMedia(response?.media?.id as string);
     }
 }
 

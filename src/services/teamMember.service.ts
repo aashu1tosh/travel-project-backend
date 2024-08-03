@@ -8,7 +8,7 @@ class TeamMemberService {
         private readonly teamMemberRepo = AppDataSource.getRepository(
             TeamMember
         )
-    ) { }
+    ) {}
 
     async createTeamMember(data: TeamMember) {
         try {
@@ -18,7 +18,7 @@ class TeamMemberService {
                 .where('media.id = :id', { id: data?.id })
                 .getOne();
 
-            if (!query?.media)
+            if (query)
                 throw HttpException.badRequest('Media can not be reused');
 
             const team = this.teamMemberRepo.create(data);
@@ -32,12 +32,16 @@ class TeamMemberService {
         try {
             const response = await this.teamMemberRepo.findOne({
                 where: { id },
-                relations: ['media']
+                relations: ['media'],
             });
+            const temp = response;
             if (!response)
                 throw HttpException.badRequest('Invalid team member id.');
-            await this.teamMemberRepo.remove(response);
-            await mediaService.deleteMedia(response?.media?.id as string)
+
+            const response2 = await this.teamMemberRepo.remove(response);
+
+            if (temp && temp.media)
+                await mediaService.deleteMedia(temp?.media?.id as string);
         } catch (error: any) {
             throw HttpException.badRequest(error?.message);
         }
@@ -50,7 +54,7 @@ class TeamMemberService {
                 order: {
                     order: 'ASC',
                 },
-                take: perPage ?? 3,
+                take: perPage ?? 10,
             });
 
             if (!response)
