@@ -20,6 +20,18 @@ class TeamMemberController {
             message: Message.deleted,
         });
     }
+
+    async getTeamMembers(req: Request, res: Response) {
+        const perPage = req.query.perPage as unknown;
+        const response = await teamMemberService.getTeamMembers(
+            perPage as number
+        );
+        res.status(StatusCodes.SUCCESS).json({
+            success: true,
+            message: Message.fetched,
+            data: response,
+        });
+    }
 }
 
 export default TeamMemberController;

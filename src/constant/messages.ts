@@ -34,7 +34,7 @@ export const deletedMessage = (title: string) => {
     return `${title} deleted successfully`;
 };
 export const updatedMessage = (title: string) => {
-    return `${title} successfully updated`;
+    return `${title} updated successfully`;
 };
 export const createdMessage = (title: string) => {
     return `${title} created successfully`;

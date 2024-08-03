@@ -2,6 +2,7 @@ import {
     IsEmail,
     IsNotEmpty,
     IsNumber,
+    IsOptional,
     IsString,
     IsUUID,
     Matches,
@@ -12,7 +13,7 @@ import { phoneNumberRegex } from './../constant/regex';
 export class AddTeamMemberDTO {
     @IsNotEmpty()
     @IsString()
-    fullName: string;
+    firstName: string;
 
     @IsNotEmpty()
     @IsString()
@@ -22,11 +23,11 @@ export class AddTeamMemberDTO {
     @IsEmail()
     email: string;
 
-    // @IsNotEmpty()
-    // @Matches(phoneNumberRegex, {
-    //     message: Message.validPhoneNumber,
-    // })
-    // phoneNumber: string;
+    @IsOptional()
+    @Matches(phoneNumberRegex, {
+        message: Message.validPhoneNumber,
+    })
+    phoneNumber: string;
 
     @IsNotEmpty()
     @IsString()

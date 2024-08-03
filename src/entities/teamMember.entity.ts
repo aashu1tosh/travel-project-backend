@@ -4,8 +4,8 @@ import Media from './media.entity';
 
 @Entity('team_member')
 export class TeamMember extends Base {
-    @Column({ name: 'full_name' })
-    fullName: string;
+    @Column({ name: 'first_name' })
+    firstName: string;
 
     @Column({ name: 'last_name' })
     lastName: string;
@@ -22,7 +22,17 @@ export class TeamMember extends Base {
     @Column()
     order: number;
 
-    @OneToOne(() => Media, { cascade: true })
+    // @OneToOne(() => Media, {
+    //     onDelete: 'CASCADE',
+    //     onUpdate: 'CASCADE',
+    // })
+    // @JoinColumn({ name: 'media_id' })
+    // media: Media;
+
+    @OneToOne(() => Media, (media) => media.teamMembers, {
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
+    })
     @JoinColumn({ name: 'media_id' })
-    media: string;
+    media: Media;
 }

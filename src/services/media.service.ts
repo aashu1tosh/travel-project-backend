@@ -1,11 +1,12 @@
-// import { MediaType } from 'express';
 import { AppDataSource } from './../config/database.config';
 import { MediaType } from './../constant/enum';
 import { Auth } from './../entities/auth/auth.entity';
 import Media from './../entities/media.entity';
 import HttpException from './../utils/HttpException.utils';
+import { deleteMedia } from './../utils/mediaDelete.utils';
 
 class MediaService {
+    teamMemberRepo: any;
     constructor(
         private readonly mediaRepo = AppDataSource.getRepository(Media)
     ) {}
@@ -28,21 +29,13 @@ class MediaService {
         return await this.mediaRepo.findOneBy({ id: id });
     }
 
-    async deleteMediaService(id: string) {
+    async deleteMedia(id: string) {
         try {
-            console.log(this.getMediaById(id));
-            // const imageDelete = await deleteMedia(filepath);
-            // if (imageDelete) {
-            //     const item = await this.media
-            //         .createQueryBuilder('media')
-            //         .delete()
-            //         .from(Media)
-            //         .where('id = :id', {
-            //             id: id,
-            //         })
-            //         .execute();
-            //     return item?.affected;
-            // }
+            const response = await this.mediaRepo.findOneBy({ id });
+            if (!response)
+                throw HttpException.badRequest('Invalid team member id.');
+            await this.teamMemberRepo.remove(response);
+            await deleteMedia(response?.path);
         } catch (error: any) {
             throw HttpException.badRequest(error?.message);
         }

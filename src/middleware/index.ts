@@ -1,11 +1,17 @@
 import cors from 'cors';
-import express, { Application } from 'express';
+import express, {
+    Application,
+    type NextFunction,
+    type Request,
+    type Response,
+} from 'express';
 import rateLimit from 'express-rate-limit';
 import helmet from 'helmet';
 import morgan from 'morgan';
 import path from 'path';
 import { DotenvConfig } from '../config/env.config';
 import routes from '../routes/index.route';
+import { StatusCodes } from './../constant/statusCodes';
 import { errorHandler } from './errorHandler.middleware';
 
 const middleware = (app: Application) => {
@@ -20,19 +26,31 @@ const middleware = (app: Application) => {
 
     app.use(
         cors({
-            origin: allowedOrigins,
+            origin: '*',
             allowedHeaders: [
                 'access-control-allow-origin',
                 'authorization',
                 'contact',
+                'content-type',
             ],
         })
     );
 
-    app.use(helmet());
+    app.use(helmet.crossOriginResourcePolicy({ policy: 'cross-origin' }));
 
     // Apply rate limiting middleware to all requests
-    app.use(limiter);
+    // app.use(limiter);
+
+    app.use((req: Request, res: Response, next: NextFunction) => {
+        const userAgent = req.headers['user-agent'];
+        const apiKey = req.headers['apikey'];
+        if (userAgent && userAgent.includes('Mozilla')) {
+            next();
+        } else {
+            if (apiKey === DotenvConfig.API_KEY) next();
+            else res.status(StatusCodes.FORBIDDEN).send('Forbidden');
+        }
+    });
 
     app.use(
         express.json({
@@ -41,8 +59,10 @@ const middleware = (app: Application) => {
     );
 
     app.use(express.static(path.join(__dirname, '../', '../', 'public/')));
+    // console.log(path.join(__dirname, '../', '../', 'public/'));
 
     app.use(morgan('common'));
+
     app.use('/api/v1', routes);
 
     app.use(errorHandler);

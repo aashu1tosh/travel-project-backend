@@ -1,7 +1,10 @@
 import { Request, Response, Router } from 'express';
 import admin from './admin.route';
 import auth from './auth.route';
+import company from './company.route';
+import contactInformation from './contactInformation.route';
 import media from './media.route';
+import page from './pages.route';
 import ping from './ping.route';
 import teamMember from './teamMember.route';
 import testimonial from './testimonial.route';
@@ -41,6 +44,18 @@ const routes: Route[] = [
     {
         path: '/team-member',
         route: teamMember,
+    },
+    {
+        path: '/company',
+        route: company,
+    },
+    {
+        path: '/contact-information',
+        route: contactInformation,
+    },
+    {
+        path: '/page',
+        route: page,
     },
 ];
 

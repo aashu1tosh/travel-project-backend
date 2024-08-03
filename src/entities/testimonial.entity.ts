@@ -19,7 +19,7 @@ export class Testimonial extends Base {
     @Max(5)
     rating: number;
 
-    @OneToOne(() => Media, { cascade: true, onDelete: 'CASCADE' })
-    @JoinColumn({ name: 'media_id', referencedColumnName: 'id' })
+    @OneToOne(() => Media, { cascade: true })
+    @JoinColumn({ name: 'media_id' })
     media: Media;
 }

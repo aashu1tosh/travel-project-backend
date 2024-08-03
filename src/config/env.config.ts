@@ -45,4 +45,6 @@ export class DotenvConfig {
 
     // CORS LIST
     static CORS_ORIGIN = process.env.CORS_ORIGIN?.split(',') || [];
+
+    static API_KEY = process.env.API_KEY;
 }

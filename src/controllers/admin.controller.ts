@@ -1,14 +1,12 @@
 import { type Request, type Response } from 'express';
 import {
     Message,
-    createdMessage,
     deletedMessage,
     updatedMessage,
 } from './../constant/messages';
 import { StatusCodes } from './../constant/statusCodes';
 import adminService from './../services/admin.service';
 import contactInformationService from './../services/contactInformation.service';
-import testimonialService from './../services/testimonial.service';
 import { getPaginationData, paginationValidator } from './../utils/pagination';
 
 class AdminController {
@@ -53,23 +51,6 @@ class AdminController {
         res.status(StatusCodes.ACCEPTED).json({
             success: true,
             message: updatedMessage('Contact Information'),
-        });
-    }
-
-    async addTestimonials(req: Request, res: Response) {
-        await testimonialService.addTestimonials(req.body);
-        res.status(StatusCodes.CREATED).json({
-            success: true,
-            message: createdMessage('New testimonials'),
-        });
-    }
-
-    async deleteTestimonials(req: Request, res: Response) {
-        const id = req.params.id;
-        await testimonialService.deleteTestimonials(id);
-        res.status(StatusCodes.SUCCESS).json({
-            success: true,
-            message: deletedMessage('Testimonial'),
         });
     }
 }

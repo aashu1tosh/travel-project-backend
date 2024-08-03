@@ -1,11 +1,19 @@
 import fs from 'fs';
 import path from 'path';
-import { AfterLoad, Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
+import {
+    AfterLoad,
+    Column,
+    Entity,
+    JoinColumn,
+    ManyToOne,
+    OneToOne,
+} from 'typeorm';
 import { DotenvConfig } from '../config/env.config';
 import { MediaType } from '../constant/enum';
 import { getTempFolderPath, getUploadFolderPath } from './../utils/path.utils';
 import { Auth } from './auth/auth.entity';
 import Base from './base.entity';
+import { TeamMember } from './teamMember.entity';
 
 @Entity('media')
 class Media extends Base {
@@ -24,9 +32,11 @@ class Media extends Base {
     @JoinColumn({ name: 'auth_id' })
     auth: Auth;
 
-    // @OneToOne(() => Testimonial, { cascade: true, onDelete: 'CASCADE' })
-    // @JoinColumn({ name: 'testimonial_id' })
-    // testimonial: Auth;
+    @OneToOne(() => TeamMember, (teamMember) => teamMember.media, {
+        cascade: true,
+    })
+    @JoinColumn({ name: 'team_member_id' })
+    teamMembers: TeamMember;
 
     /**
      * Moves an image file from the temporary folder to the upload folder.
@@ -63,7 +73,7 @@ class Media extends Base {
     @AfterLoad()
     async loadImagePath(): Promise<void> {
         // Construct the image path using the BASE_URL, type, id, and name properties.
-        this.path = `${DotenvConfig.BACKEND_URL}${this.type.toLowerCase()}/${this.name}`;
+        this.path = `${DotenvConfig.BACKEND_URL}uploads/${this.type.toLowerCase()}/${this.name}`;
     }
 }
 

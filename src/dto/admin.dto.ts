@@ -10,7 +10,7 @@ import {
     Min,
 } from 'class-validator';
 import { Message } from './../constant/messages';
-import { phoneNumberRegex } from './../constant/regex';
+import { latRegex, longRegex, phoneNumberRegex } from './../constant/regex';
 
 export class ContactInformationDTO {
     @IsNotEmpty()
@@ -22,12 +22,14 @@ export class ContactInformationDTO {
     location: string;
 
     @IsOptional()
-    @IsNumber()
-    lat: number;
+    @IsString()
+    @Matches(latRegex, { message: 'Please provide a valid latitude' })
+    lat: string;
 
     @IsOptional()
-    @IsNumber()
-    long: number;
+    @IsString()
+    @Matches(longRegex, { message: 'Please provide a valid longitude' })
+    long: string;
 
     @IsOptional()
     @IsEmail()

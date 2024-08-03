@@ -1,4 +1,5 @@
 import { createServer } from 'http';
+import path from 'path';
 import app from './config/app.config';
 import { AppDataSource } from './config/database.config';
 import { DotenvConfig } from './config/env.config';
@@ -17,5 +18,6 @@ AppDataSource.initialize()
         listen(); // Start the server
     })
     .catch((err) => {
+        console.log('🚀 ~ err:', err);
         Print.info(`❌ Database connection failure - ${err?.message}`);
     });

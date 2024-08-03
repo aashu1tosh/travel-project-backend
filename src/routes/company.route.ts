@@ -1,26 +1,30 @@
 import express from 'express';
 import { ROLE } from './../constant/enum';
-import TeamMemberController from './../controllers/teamMember.controller';
-import { AddTeamMemberDTO } from './../dto/teamMember.dto';
+import CompanyController from './../controllers/company.controller';
+import { CompanyAddDTO, CompanyUpdateDTO } from './../dto/company.dto';
 import RequestValidator from './../middleware/Request.Validator';
 import { authentication } from './../middleware/authentication.middleware';
 import { authorization } from './../middleware/authorization.middleware';
 import { catchAsync } from './../utils/catchAsync.utils';
 
 const router = express.Router();
-const teamMemberController = new TeamMemberController();
+const companyController = new CompanyController();
 
-router.get('/', catchAsync(teamMemberController.getTeamMembers));
+router.get('/', catchAsync(companyController.getCompanyInformation));
 
 router.use(authentication());
 router.use(authorization([ROLE.ADMIN]));
 
 router.post(
     '/',
-    RequestValidator.validate(AddTeamMemberDTO),
-    catchAsync(teamMemberController.addTeamMember)
+    RequestValidator.validate(CompanyAddDTO),
+    catchAsync(companyController.addCompanyInformation)
 );
 
-router.delete('/:id', catchAsync(teamMemberController.deleteTeamMember));
+router.patch(
+    '/',
+    RequestValidator.validate(CompanyUpdateDTO),
+    catchAsync(companyController.updateCompanyInformation)
+);
 
 export default router;
