@@ -8,7 +8,7 @@ class TeamMemberService {
         private readonly teamMemberRepo = AppDataSource.getRepository(
             TeamMember
         )
-    ) { }
+    ) {}
 
     async createTeamMember(data: TeamMember) {
         try {

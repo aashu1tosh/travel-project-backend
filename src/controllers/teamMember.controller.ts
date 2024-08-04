@@ -5,12 +5,12 @@ import teamMemberService from './../services/teamMember.service';
 
 class TeamMemberController {
     async addTeamMember(req: Request, res: Response) {
-        console.log(req.body)
+        console.log(req.body);
         const response = await teamMemberService.createTeamMember(req.body);
         res.status(StatusCodes.CREATED).json({
             success: true,
             message: createdMessage('Team Member'),
-            data: response
+            data: response,
         });
     }
 

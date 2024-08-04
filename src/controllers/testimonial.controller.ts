@@ -30,7 +30,7 @@ class TestimonialController {
         res.status(StatusCodes.CREATED).json({
             success: true,
             message: createdMessage('New testimonials'),
-            data: response
+            data: response,
         });
     }
 

@@ -59,7 +59,7 @@ class AdminController {
             req.query.page as string,
             req.query.perpage as string
         );
-        console.log(perpage, perpage)
+        console.log(perpage, perpage);
         const response = await adminService.getContactForm(page, perpage);
         res.status(StatusCodes.SUCCESS).json({
             success: true,

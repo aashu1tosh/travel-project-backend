@@ -19,11 +19,11 @@ class PagesController {
         res.status(StatusCodes.ACCEPTED).json({
             success: true,
             message: `Page data added successfully`,
-            data: response
+            data: response,
         });
     }
 
-    async updatePageInformation(req: Request, res: Response) { }
+    async updatePageInformation(req: Request, res: Response) {}
 }
 
 export default PagesController;

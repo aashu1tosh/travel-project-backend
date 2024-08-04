@@ -19,7 +19,7 @@ class AdminService {
         private readonly contactFormRepo = AppDataSource.getRepository(
             ContactForm
         )
-    ) { }
+    ) {}
 
     async getAllUser(page: number, perpage: number) {
         const query = this.authRepo
@@ -65,8 +65,7 @@ class AdminService {
     }
 
     async getContactForm(page: number, perpage: number) {
-        const query = this.contactFormRepo
-            .createQueryBuilder('contactForm');
+        const query = this.contactFormRepo.createQueryBuilder('contactForm');
         query
             .orderBy('contactForm.createdAt')
             .limit(perpage)

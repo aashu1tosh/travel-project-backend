@@ -6,7 +6,7 @@ import HttpException from './../utils/HttpException.utils';
 class CompanyService {
     constructor(
         private readonly companyRepo = AppDataSource.getRepository(Company)
-    ) { }
+    ) {}
 
     async getCompany() {
         const lastEntry = await this.companyRepo
@@ -15,7 +15,7 @@ class CompanyService {
             .orderBy('company.createdAt', 'DESC')
             .limit(1)
             .getOne();
-        console.log("🚀 ~ CompanyService ~ getCompany ~ lastEntry:", lastEntry)
+        console.log('🚀 ~ CompanyService ~ getCompany ~ lastEntry:', lastEntry);
         return lastEntry;
     }
     async addCompany(data: ICompany) {

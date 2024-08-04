@@ -8,19 +8,19 @@ class TestimonialService {
         private readonly testimonialRepo = AppDataSource.getRepository(
             Testimonial
         )
-    ) { }
+    ) {}
 
     async getTestimonials(page: number, perpage: number) {
         const query = this.testimonialRepo
             .createQueryBuilder('testimonial')
-            .leftJoinAndSelect('testimonial.media', 'media')
+            .leftJoinAndSelect('testimonial.media', 'media');
         query
             .orderBy('testimonial.createdAt', 'DESC')
             .limit(perpage)
             .offset((page - 1) * perpage);
         const [data, total] = await query.getManyAndCount();
 
-        return { data, total }
+        return { data, total };
     }
 
     async addTestimonials(data: Testimonial) {
