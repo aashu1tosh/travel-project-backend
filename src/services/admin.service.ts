@@ -3,6 +3,8 @@ import { ROLE } from './../constant/enum';
 import { Message } from './../constant/messages';
 import { Auth } from './../entities/auth/auth.entity';
 import { AuthDetails } from './../entities/auth/details.entity';
+import { ContactForm } from './../entities/contactForm.entity';
+import { NewsLetter } from './../entities/newLetter.entity';
 import HttpException from './../utils/HttpException.utils';
 
 class AdminService {
@@ -10,8 +12,14 @@ class AdminService {
         private readonly authRepo = AppDataSource.getRepository(Auth),
         private readonly authDetailsRepo = AppDataSource.getRepository(
             AuthDetails
+        ),
+        private readonly newsLetterRepo = AppDataSource.getRepository(
+            NewsLetter
+        ),
+        private readonly contactFormRepo = AppDataSource.getRepository(
+            ContactForm
         )
-    ) {}
+    ) { }
 
     async getAllUser(page: number, perpage: number) {
         const query = this.authRepo
@@ -54,6 +62,18 @@ class AdminService {
             .from(Auth)
             .where('id = :id', { id: id })
             .execute();
+    }
+
+    async getContactForm(page: number, perpage: number) {
+        const query = this.contactFormRepo
+            .createQueryBuilder('contactForm');
+        query
+            .orderBy('contactForm.createdAt')
+            .limit(perpage)
+            .offset((page - 1) * perpage);
+
+        const [data, total] = await query.getManyAndCount();
+        return { data, total };
     }
 }
 

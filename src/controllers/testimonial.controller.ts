@@ -6,12 +6,17 @@ import {
 } from './../constant/messages';
 import { StatusCodes } from './../constant/statusCodes';
 import testimonialService from './../services/testimonial.service';
+import { paginationValidator } from './../utils/pagination';
 
 class TestimonialController {
     async getTestimonials(req: Request, res: Response) {
-        const number = req.params.perPage as unknown;
+        const [page, perpage] = paginationValidator(
+            req.query.page as string,
+            req.query.perpage as string
+        );
         const response = await testimonialService.getTestimonials(
-            number as number
+            page,
+            perpage
         );
         res.status(StatusCodes.SUCCESS).json({
             success: true,
@@ -21,10 +26,11 @@ class TestimonialController {
     }
 
     async addTestimonials(req: Request, res: Response) {
-        await testimonialService.addTestimonials(req.body);
+        const response = await testimonialService.addTestimonials(req.body);
         res.status(StatusCodes.CREATED).json({
             success: true,
             message: createdMessage('New testimonials'),
+            data: response
         });
     }
 

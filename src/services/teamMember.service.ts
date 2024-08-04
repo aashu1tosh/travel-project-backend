@@ -8,7 +8,7 @@ class TeamMemberService {
         private readonly teamMemberRepo = AppDataSource.getRepository(
             TeamMember
         )
-    ) {}
+    ) { }
 
     async createTeamMember(data: TeamMember) {
         try {
@@ -22,7 +22,8 @@ class TeamMemberService {
                 throw HttpException.badRequest('Media can not be reused');
 
             const team = this.teamMemberRepo.create(data);
-            this.teamMemberRepo.save(team);
+            const response = this.teamMemberRepo.save(team);
+            return response;
         } catch (error: any) {
             throw HttpException.badRequest(error?.message);
         }

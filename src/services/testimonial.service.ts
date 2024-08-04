@@ -8,18 +8,19 @@ class TestimonialService {
         private readonly testimonialRepo = AppDataSource.getRepository(
             Testimonial
         )
-    ) {}
+    ) { }
 
-    async getTestimonials(perPage: number) {
-        const response = await this.testimonialRepo.find({
-            relations: ['media'],
-            order: {
-                createdAt: 'ASC',
-            },
-            take: perPage ?? 1,
-        });
-        if (!response) throw HttpException.badRequest('No testimonial found');
-        return response;
+    async getTestimonials(page: number, perpage: number) {
+        const query = this.testimonialRepo
+            .createQueryBuilder('testimonial')
+            .leftJoinAndSelect('testimonial.media', 'media')
+        query
+            .orderBy('testimonial.createdAt', 'DESC')
+            .limit(perpage)
+            .offset((page - 1) * perpage);
+        const [data, total] = await query.getManyAndCount();
+
+        return { data, total }
     }
 
     async addTestimonials(data: Testimonial) {
@@ -30,12 +31,13 @@ class TestimonialService {
                 .where('media.id = :id', { id: data?.id })
                 .getOne();
 
-            if (!query?.media)
+            if (query)
                 throw HttpException.badRequest('Media can not be reused');
 
             const write = this.testimonialRepo.create(data);
 
             const response = await this.testimonialRepo.save(write);
+            return response;
         } catch (error: any) {
             throw HttpException.badRequest(error?.message);
         }

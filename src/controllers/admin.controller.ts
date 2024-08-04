@@ -53,6 +53,23 @@ class AdminController {
             message: updatedMessage('Contact Information'),
         });
     }
+
+    async getContactForms(req: Request, res: Response) {
+        const [page, perpage] = paginationValidator(
+            req.query.page as string,
+            req.query.perpage as string
+        );
+        console.log(perpage, perpage)
+        const response = await adminService.getContactForm(page, perpage);
+        res.status(StatusCodes.SUCCESS).json({
+            success: true,
+            message: Message.fetched,
+            data: {
+                data: response.data,
+                pagination: getPaginationData(response.total, page, perpage),
+            },
+        });
+    }
 }
 
 export default AdminController;

@@ -24,4 +24,6 @@ router.patch(
     catchAsync(adminController.updateContactInformation)
 );
 
+router.get('/contact-form', catchAsync(adminController.getContactForms))
+
 export default router;

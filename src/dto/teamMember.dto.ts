@@ -4,8 +4,7 @@ import {
     IsNumber,
     IsOptional,
     IsString,
-    IsUUID,
-    Matches,
+    Matches
 } from 'class-validator';
 import { Message } from './../constant/messages';
 import { phoneNumberRegex } from './../constant/regex';
@@ -37,7 +36,12 @@ export class AddTeamMemberDTO {
     @IsNumber()
     order: number;
 
-    @IsNotEmpty()
-    @IsUUID()
+
+    @IsNotEmpty({
+        message: "Media is required"
+    })
+    @IsString({
+        message: "Media is required"
+    })
     media: string;
 }

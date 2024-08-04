@@ -27,7 +27,8 @@ class PagesService {
             .where('media.id = :id', { id: data?.id })
             .getOne();
 
-        if (!query?.media)
+        console.log(query)
+        if (query)
             throw HttpException.badRequest('Media can not be reused');
         const check = await this.pagesRepo.findOneBy({ page: data?.page });
 
@@ -42,6 +43,9 @@ class PagesService {
             const query = this.pagesRepo.create(data);
             await this.pagesRepo.save(query);
         }
+
+        const response = this.getPageInformation(data?.page as PAGE);
+        return response
     }
 
     async updatePageInformation(data: Pages) {}

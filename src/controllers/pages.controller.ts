@@ -1,7 +1,7 @@
 import { type Request, type Response } from 'express';
+import { PAGE } from './../constant/enum';
 import { StatusCodes } from './../constant/statusCodes';
 import pagesService from './../services/pages.service';
-import { PAGE } from './../constant/enum';
 
 class PagesController {
     async getPageInformation(req: Request, res: Response) {
@@ -15,14 +15,15 @@ class PagesController {
     }
 
     async postPageInformation(req: Request, res: Response) {
-        await pagesService.postPageInformation(req.body);
+        const response = await pagesService.postPageInformation(req.body);
         res.status(StatusCodes.ACCEPTED).json({
             success: true,
             message: `Page data added successfully`,
+            data: response
         });
     }
 
-    async updatePageInformation(req: Request, res: Response) {}
+    async updatePageInformation(req: Request, res: Response) { }
 }
 
 export default PagesController;
