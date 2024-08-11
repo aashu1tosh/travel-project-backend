@@ -12,16 +12,29 @@ class CompanyService {
         const lastEntry = await this.companyRepo
             .createQueryBuilder('company')
             .leftJoinAndSelect('company.media', 'media')
-            .orderBy('company.createdAt', 'DESC')
+            .orderBy('company.updatedAt', 'DESC')
             .limit(1)
             .getOne();
-        console.log('🚀 ~ CompanyService ~ getCompany ~ lastEntry:', lastEntry);
+
         return lastEntry;
     }
-    async addCompany(data: ICompany) {
+    async addCompany(data: Company) {
+        const lastEntry = await this.companyRepo
+            .createQueryBuilder('company')
+            .orderBy('company.updatedAt', 'DESC')
+            .limit(1)
+            .getOne();
+
+        if (lastEntry) {
+            const { id, createdAt, ...payload } = data;
+            const updatedRecord = Object.assign(lastEntry, payload);
+            this.companyRepo.save(updatedRecord);
+            return this.getCompany();
+        }
+
         const query = this.companyRepo.create(data as unknown as Company);
         await this.companyRepo.save(query);
-        return;
+        return this.getCompany();
     }
 
     async updateCompany(id: string, data: ICompany) {
@@ -32,7 +45,7 @@ class CompanyService {
             );
         const updatedRecord = Object.assign(query, data);
         this.companyRepo.save(updatedRecord);
-        return;
+        return this.getCompany();
     }
 }
 
