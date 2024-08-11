@@ -13,10 +13,11 @@ class CompanyController {
         });
     }
     async addCompanyInformation(req: Request, res: Response) {
-        await companyService.addCompany(req?.body);
+        const response = await companyService.addCompany(req?.body);
         res.status(StatusCodes.ACCEPTED).json({
             success: true,
             message: 'Company Information added successfully',
+            data: response,
         });
     }
 
