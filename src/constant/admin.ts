@@ -4,7 +4,7 @@ import { ROLE } from './enum';
 
 export const admins: IUser[] = [
     {
-        email: 'admin@infocare.com',
+        email: 'admin@aashutosh.com',
         password: DotenvConfig.ADMIN_PASSWORD,
         role: ROLE.ADMIN,
         details: {

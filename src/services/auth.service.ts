@@ -55,7 +55,11 @@ class AuthService {
             user.details = details;
             await this.authDetailsRepo.save(details);
             await this.authRepo.save(user);
-            return createdMessage('User');
+            this.requestVerification(user?.email);
+            return (
+                createdMessage('User') +
+                'Verify your email by clicking the link sent to your email address'
+            );
         } catch (error: any) {
             throw HttpException.badRequest(error?.message);
         }
@@ -112,10 +116,12 @@ class AuthService {
             select: ['id', 'email', 'password', 'otpVerified'],
         });
         if (!user) throw HttpException.notFound(Message.invalidCredentials);
-        if (!user?.otpVerified)
+        if (!user?.otpVerified) {
+            this.requestVerification(user?.email);
             throw HttpException.forbidden(
-                'Please verify Email before signing in.'
+                'Please verify Email which has been sent to your email before signing in.'
             );
+        }
         const isPasswordMatched = await this.bcryptService.compare(
             data.password,
             user.password
