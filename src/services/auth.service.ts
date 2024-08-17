@@ -58,7 +58,7 @@ class AuthService {
             this.requestVerification(user?.email);
             return (
                 createdMessage('User') +
-                'Verify your email by clicking the link sent to your email address'
+                '\nVerify your email by clicking the link sent to your email address'
             );
         } catch (error: any) {
             throw HttpException.badRequest(error?.message);
@@ -108,6 +108,43 @@ class AuthService {
         } catch (error) {
             throw error;
         }
+    }
+
+    async forgotPassword(email: string) {
+        const emailExist = await this.authRepo.findOne({
+            where: { email: email },
+        });
+        if (!emailExist)
+            throw HttpException.badRequest('Given Email does not exist');
+
+        const token = this.webTokenGenerate.resetPasswordToken(
+            emailExist.id as string
+        );
+
+        const verificationLink = `${DotenvConfig.BACKEND_URL}api/v1/auth/reset-password/${token}`;
+
+        const mailOptions: IMailOptions = {
+            to: emailExist?.email,
+            subject: 'Regarding Password Reset',
+            text:
+                'Verification works withing 5 minutes with following link \n' +
+                verificationLink,
+        };
+        this.emailService.sendMail(mailOptions);
+    }
+
+    async resetPassword(password: string, token: string) {
+        const verified = await this.webTokenGenerate.verify(
+            token,
+            DotenvConfig.VERIFY_EMAIL_TOKEN_SECRET
+        );
+        if (!verified) throw HttpException.conflict('Invalid token');
+
+        const user = await this.authRepo.findOneBy({ id: verified.id });
+        if (user) user.password = await this.bcryptService.hash(password);
+        else HttpException.badRequest('User id not found');
+        user?.save();
+        return 'Password reset successful';
     }
 
     async login(data: Auth) {

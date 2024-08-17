@@ -29,6 +29,18 @@ export class WebTokenService {
         );
     }
 
+    resetPasswordToken(id: string): string {
+        return jwt.sign(
+            {
+                id: id,
+            },
+            DotenvConfig.VERIFY_EMAIL_TOKEN_SECRET,
+            {
+                expiresIn: DotenvConfig.VERIFY_EMAIL_TOKEN_EXPIRES_IN,
+            }
+        );
+    }
+
     verify(token: string, secret: string): any {
         return jwt.verify(token, secret);
     }

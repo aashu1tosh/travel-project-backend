@@ -74,6 +74,20 @@ export class LoginUserDTO {
     password: string;
 }
 
+export class EmailDTO {
+    @IsNotEmpty()
+    @IsEmail()
+    email: string;
+}
+
+export class ResetPasswordDTO {
+    @IsNotEmpty()
+    @Matches(passwordRegex, {
+        message: Message.passwordShouldBeStrong,
+    })
+    password: string;
+}
+
 export class GoogleLoginDTO {
     @IsNotEmpty()
     @IsString()
