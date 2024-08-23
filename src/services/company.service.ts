@@ -2,6 +2,7 @@ import { AppDataSource } from './../config/database.config';
 import { Company } from './../entities/company.entity';
 import { ICompany } from './../interface/company.interface';
 import HttpException from './../utils/HttpException.utils';
+import mediaService from './media.service';
 
 class CompanyService {
     constructor(
@@ -28,7 +29,9 @@ class CompanyService {
         if (lastEntry) {
             const { id, createdAt, ...payload } = data;
             const updatedRecord = Object.assign(lastEntry, payload);
-            this.companyRepo.save(updatedRecord);
+            await this.companyRepo.save(updatedRecord);
+            if (lastEntry?.media != payload?.media)
+                mediaService.deleteMedia(lastEntry?.media as unknown as string);
             return this.getCompany();
         }
 
