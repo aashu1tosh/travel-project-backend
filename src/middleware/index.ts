@@ -1,9 +1,9 @@
 import cors from 'cors';
 import express, {
     Application,
-    type NextFunction,
-    type Request,
+    NextFunction,
     type Response,
+    type Request
 } from 'express';
 import rateLimit from 'express-rate-limit';
 import helmet from 'helmet';
@@ -57,13 +57,13 @@ const middleware = (app: Application) => {
             limit: '10mb',
         })
     );
-
-    app.use(express.static(path.join(__dirname, '../', '../', 'public/')));
-
     app.use(morgan('common'));
-
     app.use('/api/v1', routes);
-
+    app.use(express.static(path.join(__dirname, '../', '../', 'public/')));
+    app.use(express.static(path.join(__dirname, '../../', 'frontend-dist')));
+    app.get('*', (_, res: Response) => {
+        res.sendFile(path.join(__dirname, '../../', 'frontend-dist', 'index.html'));
+    });
     app.use(errorHandler);
 };
 
