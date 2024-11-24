@@ -1,0 +1,6 @@
+node_modules
+log
+frontend-dist
+build
+Dockerfile
+.dockerignore

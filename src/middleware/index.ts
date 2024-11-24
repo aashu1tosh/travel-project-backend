@@ -3,7 +3,7 @@ import express, {
     Application,
     NextFunction,
     type Response,
-    type Request
+    type Request,
 } from 'express';
 import rateLimit from 'express-rate-limit';
 import helmet from 'helmet';
@@ -26,7 +26,7 @@ const middleware = (app: Application) => {
 
     app.use(
         cors({
-            origin: '*',
+            origin: allowedOrigins,
             allowedHeaders: [
                 'access-control-allow-origin',
                 'authorization',
@@ -43,7 +43,7 @@ const middleware = (app: Application) => {
 
     app.use((req: Request, res: Response, next: NextFunction) => {
         const userAgent = req.headers['user-agent'];
-        const apiKey = req.headers['apikey'];
+        const apiKey = req.headers['x-api-key'];
         if (userAgent && userAgent.includes('Mozilla')) {
             next();
         } else {
@@ -62,7 +62,9 @@ const middleware = (app: Application) => {
     app.use(express.static(path.join(__dirname, '../', '../', 'public/')));
     app.use(express.static(path.join(__dirname, '../../', 'frontend-dist')));
     app.get('*', (_, res: Response) => {
-        res.sendFile(path.join(__dirname, '../../', 'frontend-dist', 'index.html'));
+        res.sendFile(
+            path.join(__dirname, '../../', 'frontend-dist', 'index.html')
+        );
     });
     app.use(errorHandler);
 };
