@@ -35,10 +35,7 @@ export class DotenvConfig {
     static OTP_SECRET = process.env.OTP_SECRET!;
 
     // BACKEND URL
-    static BACKEND_URL = process.env
-        .BACKEND_URL!.concat(':')
-        .concat(process.env.PORT!)
-        .concat('/');
+    static BACKEND_URL = process.env.BACKEND_URL!
 
     // DEBUG_MODE
     static DEBUG_MODE = process.env.DEBUG_MODE;

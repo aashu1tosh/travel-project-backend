@@ -2,8 +2,8 @@ import cors from 'cors';
 import express, {
     Application,
     NextFunction,
-    type Response,
     type Request,
+    type Response,
 } from 'express';
 import rateLimit from 'express-rate-limit';
 import helmet from 'helmet';
@@ -18,10 +18,10 @@ const middleware = (app: Application) => {
     const allowedOrigins = DotenvConfig.CORS_ORIGIN;
     const limiter = rateLimit({
         windowMs: 15 * 60 * 1000, // 15 minutes
-        max: 100, // Limit each IP to 100 requests per windowMs
+        max: 5000, // Limit each IP to 100 requests per windowMs
         message:
             'Too many requests from this IP, please try again after 15 minutes.',
-        headers: true, // Send rate limit info in response headers
+        headers: false, // Send rate limit info in response headers
     });
 
     app.use(
@@ -36,6 +36,7 @@ const middleware = (app: Application) => {
         })
     );
 
+    app.use(helmet())
     app.use(helmet.crossOriginResourcePolicy({ policy: 'cross-origin' }));
 
     // Apply rate limiting middleware to all requests

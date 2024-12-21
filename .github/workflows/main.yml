@@ -18,8 +18,8 @@ jobs:
       - name: Move public folder
         run: |
           if [ -d "public" ]; then
-            mkdir -p ~/cicd/_temp/travel/public
-            mv public ~/cicd/_temp/travel/
+            mkdir -p /root/_temp/travel/public
+            mv public /root/_temp/travel/
           else
               echo "Public folder does not exist; so Nothing to move."
           fi
@@ -34,8 +34,8 @@ jobs:
 
       - name: Restore public folder
         run: |
-          if [ -d "~/cicd/_temp/travel/public/" ]; then
-            mv ~/cicd/_temp/travel/public/ public/
+          if [ -d "/root/_temp/travel/public/" ]; then
+            mv /root/_temp/travel/public/ public/
           else
             echo "Public folder does not exist; so nothing to restore"
           fi
@@ -46,5 +46,4 @@ jobs:
 
       - name: Restart Pm2
         run: |
-          export HOME="~/cicd"
-          pm2 restart travel --update-env
+          pm2 restart travel-backend --update-env
