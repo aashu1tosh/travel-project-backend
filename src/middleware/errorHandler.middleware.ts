@@ -11,6 +11,7 @@ export const errorHandler = (
 
     let data = {
         success: false,
+        check: "cicd check",
         message: 'Error Occurred',
         ...(DotenvConfig.DEBUG_MODE === 'true' && {
             originalError: error.message,
