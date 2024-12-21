@@ -46,5 +46,5 @@ jobs:
 
       - name: Restart Pm2
         run: |
-          export HOME="~/root"
+          export HOME="/root"
           pm2 restart travel --update-env
