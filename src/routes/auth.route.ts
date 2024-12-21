@@ -2,8 +2,10 @@ import express from 'express';
 import AuthController from '../controllers/auth.controller';
 import {
     CreateUserDTO,
+    EmailDTO,
     LoginUserDTO,
     RequestEmailVerificationDTO,
+    ResetPasswordDTO,
     UpdatePasswordDTO,
 } from '../dto/auth.dto';
 import RequestValidator from '../middleware/Request.Validator';
@@ -32,6 +34,18 @@ router.post(
     '/login',
     RequestValidator.validate(LoginUserDTO),
     catchAsync(authController.login)
+);
+
+router.post(
+    '/forgot-password',
+    RequestValidator.validate(EmailDTO),
+    catchAsync(authController.forgotPassword)
+);
+
+router.post(
+    '/reset-password/:token',
+    RequestValidator.validate(ResetPasswordDTO),
+    catchAsync(authController.resetPassword)
 );
 
 router.use(authentication());

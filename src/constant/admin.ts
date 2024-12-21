@@ -8,9 +8,9 @@ export const admins: IUser[] = [
         password: DotenvConfig.ADMIN_PASSWORD,
         role: ROLE.ADMIN,
         details: {
-            firstName: 'Information',
-            middleName: 'Care',
-            lastName: 'Pvt. Ltd.',
+            firstName: 'Aashutosh',
+            middleName: '',
+            lastName: 'Parajuli',
             phoneNumber: '9843818516',
         },
     },

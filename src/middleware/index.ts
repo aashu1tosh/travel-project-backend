@@ -1,7 +1,7 @@
 import cors from 'cors';
 import express, {
     Application,
-    type NextFunction,
+    NextFunction,
     type Request,
     type Response,
 } from 'express';
@@ -18,15 +18,15 @@ const middleware = (app: Application) => {
     const allowedOrigins = DotenvConfig.CORS_ORIGIN;
     const limiter = rateLimit({
         windowMs: 15 * 60 * 1000, // 15 minutes
-        max: 100, // Limit each IP to 100 requests per windowMs
+        max: 5000, // Limit each IP to 100 requests per windowMs
         message:
             'Too many requests from this IP, please try again after 15 minutes.',
-        headers: true, // Send rate limit info in response headers
+        headers: false, // Send rate limit info in response headers
     });
 
     app.use(
         cors({
-            origin: '*',
+            origin: allowedOrigins,
             allowedHeaders: [
                 'access-control-allow-origin',
                 'authorization',
@@ -36,6 +36,7 @@ const middleware = (app: Application) => {
         })
     );
 
+    app.use(helmet())
     app.use(helmet.crossOriginResourcePolicy({ policy: 'cross-origin' }));
 
     // Apply rate limiting middleware to all requests
@@ -43,7 +44,7 @@ const middleware = (app: Application) => {
 
     app.use((req: Request, res: Response, next: NextFunction) => {
         const userAgent = req.headers['user-agent'];
-        const apiKey = req.headers['apikey'];
+        const apiKey = req.headers['x-api-key'];
         if (userAgent && userAgent.includes('Mozilla')) {
             next();
         } else {
@@ -57,13 +58,15 @@ const middleware = (app: Application) => {
             limit: '10mb',
         })
     );
-
-    app.use(express.static(path.join(__dirname, '../', '../', 'public/')));
-
     app.use(morgan('common'));
-
     app.use('/api/v1', routes);
-
+    app.use(express.static(path.join(__dirname, '../', '../', 'public/')));
+    app.use(express.static(path.join(__dirname, '../../', 'frontend-dist')));
+    app.get('*', (_, res: Response) => {
+        res.sendFile(
+            path.join(__dirname, '../../', 'frontend-dist', 'index.html')
+        );
+    });
     app.use(errorHandler);
 };
 

@@ -30,13 +30,15 @@ const storage = multer.diskStorage({
             fs.mkdirSync(folderPath, { recursive: true });
         cb(null, folderPath);
     },
+
     filename: (_req, file, cb) => {
+        const fileType = file.mimetype.split('/').pop()?.includes('+')
+            ? file.mimetype.split('/').pop()?.split('+')[0]
+            : file.mimetype.split('/').pop();
+
         const fileName =
-            Date.now() +
-            '-' +
-            Math.round(Math.random() * 1e9) +
-            '.' +
-            file.mimetype.split('/').pop();
+            Date.now() + '-' + Math.round(Math.random() * 1e9) + '.' + fileType;
+
         cb(null, fileName);
     },
 });

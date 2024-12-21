@@ -1,0 +1,49 @@
+name: Node.js CI
+
+on:
+  push:
+    branches: ['deploy']
+  pull_request:
+    branches: ['deploy']
+
+jobs:
+  build:
+    runs-on: self-hosted
+
+    steps:
+      - name: Copy .env file
+        run: |
+          echo "${{ secrets.ENV_FILE }}" > .env
+
+      - name: Move public folder
+        run: |
+          if [ -d "public" ]; then
+            mkdir -p /root/_temp/travel/public
+            mv public /root/_temp/travel/
+          else
+              echo "Public folder does not exist; so Nothing to move."
+          fi
+
+      - uses: actions/checkout@v3
+
+      - name: Install Dependencies
+        run: pnpm i
+
+      - name: Build Project
+        run: pnpm build
+
+      - name: Restore public folder
+        run: |
+          if [ -d "/root/_temp/travel/public/" ]; then
+            mv /root/_temp/travel/public/ public/
+          else
+            echo "Public folder does not exist; so nothing to restore"
+          fi
+
+      - name: Copy .env file
+        run: |
+          echo "${{ secrets.ENV_FILE }}" > .env
+
+      - name: Restart Pm2
+        run: |
+          pm2 restart travel-backend --update-env
